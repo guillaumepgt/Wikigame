@@ -1,4 +1,3 @@
-// functions.js
 export async function fetchRandomWikipediaPage() {
 	const url = `https://fr.wikipedia.org/w/api.php?action=query&list=random&rnnamespace=0&rnlimit=1&format=json&origin=*`;
 	const response = await fetch(url);
