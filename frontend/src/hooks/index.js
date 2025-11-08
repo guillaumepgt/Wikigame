@@ -1,0 +1,1 @@
+export { useWikipedia } from './useWikipedia';

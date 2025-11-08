@@ -1,0 +1,1 @@
+export { LoadWikipediaPage } from './LoadWikipediaPage';

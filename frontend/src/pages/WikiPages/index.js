@@ -1,0 +1,1 @@
+export { WikiPages } from './WikiPages';

@@ -1,4 +1,5 @@
 use actix_web::{App, HttpServer};
+use actix_cors::Cors;
 
 mod models;
 mod handlers;
@@ -15,6 +16,12 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(|| {
         App::new()
+            .wrap(
+                Cors::default()
+                    .allow_any_origin()
+                    .allow_any_method()
+                    .allow_any_header()
+            )
             .configure(routes::config)
     })
         .bind(&addr)?
