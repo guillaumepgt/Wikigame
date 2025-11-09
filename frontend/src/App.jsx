@@ -1,10 +1,19 @@
-import { WikiPages } from './pages';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import { WikiPages, Home } from './pages';
+import {WikiHeader} from "./components";
 
 function App() {
   return (
-    <div className="App">
-      <WikiPages />
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <WikiHeader />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/page" element={<WikiPages />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

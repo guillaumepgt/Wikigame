@@ -3,7 +3,7 @@ import { useWikipedia } from '../../hooks';
 import {
 	Spinner,
 	ErrorMessage,
-	WikiHeader,
+	WikiName,
 	LoadWikipediaPage
 } from '../../components';
 
@@ -41,7 +41,7 @@ export function WikiPages() {
 
 	return (
 		<div style={{ margin: '50px', padding: '20px' }}>
-			<WikiHeader
+			<WikiName
 				title={currentTitle || pageData.title}
 				link={pageData.link}
 				onRandomPage={fetchRandomPage}
