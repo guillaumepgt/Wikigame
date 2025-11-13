@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./WikiHeader.css"
 
@@ -27,24 +28,26 @@ function Icon({ name, className = "" }) {
 	}
 }
 
-export function WikiHeader({ active, onNavigate, brand = "WikiGame" }) {
+export function WikiHeader({ active, brand = "WikiGame" }) {
+	const navigate = useNavigate();
+
 	const items = [
-		{ id: "home", label: "Home", icon: "home" },
-		{ id: "partie", label: "Partie", icon: "game" },
-		{ id: "stats", label: "Stats", icon: "stats" },
+		{ id: "home", label: "Home", icon: "home", path: "/" },
+		{ id: "partie", label: "Partie", icon: "game", path: "/page" },
+		{ id: "stats", label: "Stats", icon: "stats", path: "/stats" },
 	];
 
 	const handleKeyDown = (e, idx) => {
 		if (e.key === "ArrowRight") {
 			const next = (idx + 1) % items.length;
-			onNavigate(items[next].id);
+			navigate(items[next].path);
 			e.preventDefault();
 		} else if (e.key === "ArrowLeft") {
 			const prev = (idx - 1 + items.length) % items.length;
-			onNavigate(items[prev].id);
+			navigate(items[prev].path);
 			e.preventDefault();
 		} else if (e.key === "Enter" || e.key === " ") {
-			onNavigate(items[idx].id);
+			navigate(items[idx].path);
 			e.preventDefault();
 		}
 	};
@@ -64,7 +67,7 @@ export function WikiHeader({ active, onNavigate, brand = "WikiGame" }) {
 									aria-selected={isActive}
 									tabIndex={isActive ? 0 : -1}
 									className={`nav-item ${isActive ? "active" : ""}`}
-									onClick={() => onNavigate(it.id)}
+									onClick={() => navigate(it.path)}
 									onKeyDown={(e) => handleKeyDown(e, idx)}
 								>
 									<Icon name={it.icon} className="nav-icon" />
@@ -79,7 +82,7 @@ export function WikiHeader({ active, onNavigate, brand = "WikiGame" }) {
 			<div className="header-actions">
 				<button
 					className="cta"
-					onClick={() => onNavigate("partie")}
+					onClick={() => navigate("/page")}
 					aria-label="Démarrer une partie"
 				>
 					Nouvelle partie

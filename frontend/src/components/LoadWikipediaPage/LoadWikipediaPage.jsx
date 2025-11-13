@@ -8,8 +8,10 @@ export async function LoadWikipediaPage(title = "France") {
 			"https://fr.wikipedia.org/w/load.php?lang=fr&modules=site.styles&only=styles"
 		);
 
-		const html = await htmlRes.text();
+		let html = await htmlRes.text();
 		const css = await cssRes.text();
+
+		html = html.replace(/<base[^>]*>/gi, "");
 
 		if (!document.getElementById("wiki-css")) {
 			const style = document.createElement("style");

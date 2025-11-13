@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import { WikiPages, Home } from './pages';
+import { WikiPages, Home, BuildingPage } from './pages';
 import {WikiHeader} from "./components";
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/page" element={<WikiPages />} />
+          <Route path="*" element={<BuildingPage />} />
         </Routes>
       </div>
     </BrowserRouter>
