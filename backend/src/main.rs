@@ -1,5 +1,6 @@
-use actix_web::{App, HttpServer};
+use actix_web::{App, HttpServer, web};
 use actix_cors::Cors;
+use sqlx::MySqlPool;
 
 mod models;
 mod handlers;
@@ -14,8 +15,22 @@ async fn main() -> std::io::Result<()> {
 
     println!("🚀 Serveur lancé sur http://{}", addr);
 
-    HttpServer::new(|| {
+    let pool = loop {
+        match MySqlPool::connect(&config.database_url).await {
+            Ok(pool) => {
+                println!("Connexion à la base de données réussie!");
+                break pool;
+            }
+            Err(e) => {
+                println!("Erreur de connexion à la base de données: {}. Nouvelle tentative dans 5s...", e);
+                tokio::time::sleep(tokio::time::Duration::from_secs(5)).await;
+            }
+        }
+    };
+
+    HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::new(pool.clone()))
             .wrap(
                 Cors::default()
                     .allow_any_origin()

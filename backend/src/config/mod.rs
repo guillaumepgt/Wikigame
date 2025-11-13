@@ -1,6 +1,7 @@
 pub struct AppConfig {
     pub host: String,
     pub port: u16,
+    pub database_url: String, // ⚡ ajouter la DB
 }
 
 impl AppConfig {
@@ -11,6 +12,8 @@ impl AppConfig {
                 .unwrap_or_else(|_| "8080".to_string())
                 .parse()
                 .unwrap_or(8080),
+            database_url: std::env::var("DATABASE_URL")
+                .unwrap_or_else(|_| "mysql://wikigame:wikigamepass@wiki-db/wikigame".to_string()),
         }
     }
 

@@ -1,4 +1,5 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
 
 #[derive(Deserialize, Debug)]
 pub struct ApiResponse {
@@ -29,4 +30,16 @@ pub struct ParseContent {
 pub struct TextContent {
     #[serde(rename = "*")]
     pub content: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct Party {
+    pub id: String,
+    pub title: String,
+    pub status: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct CreatePartyRequest {
+    pub title: String,
 }

@@ -1,30 +1,35 @@
-# docker-compose.yml
 version: '3.8'
 
 services:
-  # Backend Node.js avec Socket.IO
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: wikigame-backend
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=production
       - PORT=3001
       - CORS_ORIGIN=http://localhost:3000
+      - DB_HOST=db
+      - DB_USER=wikigame
+      - DB_PASSWORD=wikigamepass
+      - DB_NAME=wikigame
     volumes:
       - ./backend:/app
       - /app/node_modules
     networks:
       - wikipedia-network
     restart: unless-stopped
+    depends_on:
+      - db
 
-  # Frontend React
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: wikigame-frontend
     ports:
       - "3000:80"
     depends_on:
@@ -35,21 +40,28 @@ services:
       - wikipedia-network
     restart: unless-stopped
 
-  # Redis pour la gestion des sessions (optionnel)
-  redis:
-    image: redis:7-alpine
+  db:
+    build:
+      context: ./databases
+    container_name: wikigame-db
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=wikigame
+      - MYSQL_USER=wikigame
+      - MYSQL_PASSWORD=wikigamepass
     ports:
-      - "6379:6379"
+      - "3306:3306"
     volumes:
-      - redis-data:/data
+      - wikigame-db-data:/var/lib/mysql
+      - ./databases/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - wikipedia-network
-    restart: unless-stopped
-    command: redis-server --appendonly yes
+
 
 networks:
   wikipedia-network:
     driver: bridge
 
 volumes:
-  redis-data:
+  wikigame-db-data:
